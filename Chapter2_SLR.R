@@ -3,7 +3,7 @@
 rm(list = ls())
 dta_production <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/production.txt",header = TRUE)
 head(dta_production)
-attach(dta_production) #dont forget detaching after using
+attach(dta_production) #dont forget to "detach()" after using
 
 #Figure 2.1 on page 16
 #obtain the scatter plot
