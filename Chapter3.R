@@ -39,7 +39,7 @@ plot(x2,m2$residuals,ylab="Residuals",ylim=c(-2,2),main="Data Set 2")
 
 detach(anscombe)
 
-
+#Huber's Example
 huber <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/huber.txt",header=TRUE)
 attach(huber)
 
@@ -73,7 +73,8 @@ points(x,YBad)
 detach(huber)
 
 
-bonds <- read.table("bonds.txt",header=TRUE)
+#Treasure's bond example
+bonds <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/bonds.txt",header=TRUE)
 attach(bonds)
 
 #Figure 3.9 on page 63
@@ -93,6 +94,7 @@ leverage1 <- hatvalues(m1)
 StanRes1 <- rstandard(m1)
 residual1 <- m1$residuals
 cbind(Case,CouponRate,BidPrice,round(leverage1,3),round(residual1,3),round(StanRes1,3))
+which(StanRes1>1.5)
 
 #Figure 3.10 on page 64
 plot(CouponRate,StanRes1,xlab="Coupon Rate (%)", ylab="Standardized Residuals",xlim=c(2,14))
