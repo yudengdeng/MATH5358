@@ -2,6 +2,7 @@
 rm(list = ls())
 anscombe <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/anscombe.txt",header=TRUE)
 attach(anscombe)
+head(anscombe)
 
 #Figure 3.1 on page 46
 par(mfrow=c(2,2))
@@ -42,6 +43,7 @@ detach(anscombe)
 #Huber's Example
 huber <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/huber.txt",header=TRUE)
 attach(huber)
+head(huber)
 
 #Regression output on page 54
 mBad <- lm(YBad~x)
@@ -94,7 +96,7 @@ leverage1 <- hatvalues(m1)
 StanRes1 <- rstandard(m1)
 residual1 <- m1$residuals
 cbind(Case,CouponRate,BidPrice,round(leverage1,3),round(residual1,3),round(StanRes1,3))
-which(StanRes1>1.5)
+which(StanRes1>2)
 
 #Figure 3.10 on page 64
 plot(CouponRate,StanRes1,xlab="Coupon Rate (%)", ylab="Standardized Residuals",xlim=c(2,14))
