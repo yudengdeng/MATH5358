@@ -75,6 +75,7 @@ points(x,YBad)
 detach(huber)
 
 
+rm(list = ls())
 #Treasure's bond example
 bonds <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/bonds.txt",header=TRUE)
 attach(bonds)
@@ -96,7 +97,7 @@ leverage1 <- hatvalues(m1)
 StanRes1 <- rstandard(m1)
 residual1 <- m1$residuals
 cbind(Case,CouponRate,BidPrice,round(leverage1,3),round(residual1,3),round(StanRes1,3))
-which(StanRes1>2)
+which(abs(as.numeric(StanRes1))>2) 
 
 #Figure 3.10 on page 64
 plot(CouponRate,StanRes1,xlab="Coupon Rate (%)", ylab="Standardized Residuals",xlim=c(2,14))
@@ -120,6 +121,7 @@ plot(CouponRate[-c(4,13,35)],StanRes2,xlab="Coupon Rate (%)", ylab="Standardized
 abline(h=2,lty=2)
 abline(h=-2,lty=2)
 
+#Cook's distance
 #Figure 3.13 on page 68
 cd1 <- cooks.distance(m1)
 plot(CouponRate,cd1,xlab="Coupon Rate (%)", ylab="Cook's Distance")
@@ -130,11 +132,12 @@ identify(CouponRate,cd1,Case)
 
 detach(bonds)
 
-
-production <- read.table("production.txt",header=TRUE)
+#production data example
+production <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/production.txt",header=TRUE)
 attach(production)
 
 m1 <- lm(RunTime~RunSize)
+summary(m1)
 
 #Figure 3.14 on page 70
 par(mfrow=c(2,2))
@@ -142,7 +145,11 @@ plot(m1)
 
 detach(production)
 
-cleaning <- read.table("cleaning.txt",header=TRUE)
+
+#contract cleaning data example
+cleaning <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/cleaning.txt",header=TRUE)
+head(cleaning)
+dim(cleaning)
 attach(cleaning)
 
 #Figure 3.15 on page 71
@@ -176,6 +183,11 @@ par(mfrow=c(1,1))
 plot(xx,sds,xlab="Number of Crews", ylab="Standard deviation(Rooms Cleaned)")
 abline(lsfit(xx,sds))
 
+
+#Poisson distribution
+par(mfrow=c(1,1))
+plot(1:60, dpois(1:60, lambda=30), type='h')
+
 #Regression output on page 77
 sqrtcrews <- sqrt(Crews)
 sqrtrooms <- sqrt(Rooms)
@@ -194,7 +206,16 @@ plot(sqrtcrews,StanRes2,xlab="Square Root(Number of Crews)", ylab="Standardized 
 par(mfrow=c(2,2))
 plot(m2)
 
+#Compare the prediction interval
+pred_m2 <- predict(m2,newdata=data.frame(sqrtcrews=c(2,4)),interval="prediction",level=0.95)
+pred_m2[,2] <- pred_m2[,2]^2
+pred_m2[,3] <- pred_m2[,3]^2
+predict(m1,newdata=data.frame(Crews=c(4,16)),interval="prediction",level=0.95)
+
 detach(cleaning)
+
+
+
 
 
 confood1 <- read.table("confood1.txt",header=TRUE)
