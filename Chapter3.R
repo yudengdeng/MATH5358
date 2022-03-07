@@ -79,7 +79,7 @@ rm(list = ls())
 #Treasure's bond example
 bonds <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/bonds.txt",header=TRUE)
 attach(bonds)
-
+bonds
 #Figure 3.9 on page 63
 par(mfrow=c(1,1))
 plot(CouponRate,BidPrice,xlab="Coupon Rate (%)", ylab="Bid Price ($)",ylim=c(85,120),xlim=c(2,14))
@@ -151,12 +151,10 @@ cleaning <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/cl
 head(cleaning)
 dim(cleaning)
 attach(cleaning)
-
 #Figure 3.15 on page 71
 par(mfrow=c(1,1))
 plot(Crews,Rooms,xlab="Number of Crews",ylab="Number of Rooms Cleaned")
 abline(lsfit(Crews,Rooms))
-
 #Regression output on pages 72 and 73
 m1 <- lm(Rooms~Crews)
 summary(m1)
@@ -183,7 +181,7 @@ par(mfrow=c(1,1))
 plot(xx,sds,xlab="Number of Crews", ylab="Standard deviation(Rooms Cleaned)")
 abline(lsfit(xx,sds))
 
-
+## Data Transformation
 #Poisson distribution
 par(mfrow=c(1,1))
 plot(1:60, dpois(1:60, lambda=30), type='h')
@@ -218,7 +216,7 @@ detach(cleaning)
 
 
 
-confood1 <- read.table("confood1.txt",header=TRUE)
+confood1 <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/confood1.txt",header=TRUE)
 attach(confood1)
 
 #Figure 3.22 on page 80
@@ -241,7 +239,9 @@ plot(log(Price),StanRes1,xlab="log(Price)", ylab="Standardized Residuals")
 detach(confood1)
 
 
-responsetransformation <- read.table("responsetransformation.txt",header=TRUE)
+
+
+responsetransformation <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/responsetransformation.txt",header=TRUE)
 attach(responsetransformation)
 
 #Figure 3.25 on page 84
@@ -257,7 +257,7 @@ plot(x,StanRes1,ylab="Standardized Residuals")
 plot(x,absrtsr1,ylab="Square Root(|Standardized Residuals|)")
 
 #Figure 3.27 on page 86
-par(mfrow=c(3,2))
+par(mfrow=c(2,3))
 plot(density(y,bw="SJ",kern="gaussian"),type="l",
 main="Gaussian kernel density estimate",xlab="y")
 rug(y)
@@ -273,16 +273,15 @@ qqnorm(x, ylab = "x")
 qqline(x, lty = 2, col=2)
 
 #Figure 3.28 on page 87
-install.packages("alr3")
-#You will be asked to 
-#--- Please select a CRAN mirror for use in this session ---
+#alr3 is too old to be installed
+#remotes::install_github("cran/alr3")
 library(alr3)
 par(mfrow=c(1,1))
-inverse.response.plot(m1,key=TRUE)
+inverseResponsePlot(m1,key=TRUE)
 # Click on the section of the plot that you wish to put the figure legend
 
 #Figure 3.29 on page 88
-inverse.response.plot(m1,lam=c(-1,-0.5, -0.33, -0.25, 0, 0.25, 0.33, 0.5,1))
+inverseResponsePlot(m1,lam=c(-1,-0.5, -0.33, -0.25, 0, 0.25, 0.33, 0.5,1))
 lambda <- c(-1,-0.5, -0.33, -0.25, 0, 0.25, 0.33, 0.5,1)
 RSS <- c(46673.9,24090.7,15264.2,11637.1,3583.8,440,266,880.2,7136.9)
 plot(lambda,RSS,type="l",ylab=expression(RSS(lambda)),xlab=expression(lambda))
@@ -409,170 +408,3 @@ plot(sqrt(Score),absrtsr3,ylab="Square Root(|Standardized Residuals|)",xlab=expr
 abline(lsfit(sqrt(Score),absrtsr3),lty=2,col=2)
 
 detach(salarygov)
-
-#################EXERCISES
-
-#Exercise 3.5.1
-airfares <- read.table("airfares.txt",header=TRUE)
-attach(airfares)
-
-#R output on page 104
-m1 <- lm(Fare~Distance)
-summary(m1)
-
-#Figure 3.41 on page 104
-par(mfrow=c(1,2))
-plot(Distance,Fare)
-abline(lsfit(Distance,Fare))
-leverage1 <- hatvalues(m1)
-StanRes1 <- rstandard(m1)
-residual1 <- m1$residuals
-plot(Distance,StanRes1, ylab="Standardized Residuals")
-abline(h=2,lty=2)
-abline(h=-2,lty=2)
-
-detach(airfares)
-
-#Exercise 3.5.4
-glakes <- read.table("glakes.txt",header=TRUE)
-attach(glakes)
-
-#R output on page 107
-m1 <- lm(Time~Tonnage)
-summary(m1)
-
-#Figure 3.42 on page 106
-par(mfrow=c(2,2))
-plot(Tonnage,Time)
-abline(lsfit(Tonnage,Time))
-leverage1 <- hatvalues(m1)
-StanRes1 <- rstandard(m1)
-absrtsr1 <- sqrt(abs(StanRes1))
-residual1 <- m1$residuals
-plot(Tonnage,StanRes1, ylab="Standardized Residuals")
-abline(h=2,lty=2)
-abline(h=-2,lty=2)
-plot(Tonnage,absrtsr1,ylab="Square Root(|Standardized Residuals|)")
-abline(lsfit(Tonnage,absrtsr1),lty=2,col=1)
-qqnorm(StanRes1, ylab = "Standardized Residuals")
-qqline(StanRes1, lty = 2, col=1)
-
-#Figure 3.43 on page 107
-par(mfrow=c(3,2))
-plot(density(Time,bw="SJ",kern="gaussian"),type="l",
-main="Gaussian kernel density estimate",xlab="Time")
-rug(Time)
-boxplot(Time,ylab="Time")
-qqnorm(Time, ylab = "Time")
-qqline(Time, lty = 2, col=1)
-sj <- bw.SJ(Tonnage,lower = 0.1, upper = 1000)
-plot(density(Tonnage,bw=sj,kern="gaussian"),type="l",
-main="Gaussian kernel density estimate",xlab="Tonnage")
-rug(Tonnage)
-boxplot(Tonnage,ylab="Tonnage")
-qqnorm(Tonnage, ylab = "Tonnage")
-qqline(Tonnage, lty = 2, col=1)
-
-#R output on page 108
-library(alr3)
-summary(tranxy <- bctrans(~Time+Tonnage))
-
-#R output on page 108
-m2 <- lm(log(Time)~I(Tonnage^0.25))
-summary(m2)
-
-#Figure 3.44 on page 108
-tTime <- log(Time)
-tTonnage <- Tonnage^0.25
-par(mfrow=c(2,2))
-plot(tTonnage,tTime,xlab=expression(Tonnage^0.25),ylab="log(Time)")
-abline(lsfit(tTonnage,tTime))
-leverage2 <- hatvalues(m2)
-StanRes2 <- rstandard(m2)
-absrtsr2 <- sqrt(abs(StanRes2))
-residual2 <- m2$residuals
-plot(tTonnage,StanRes2, ylab="Standardized Residuals",xlab=expression(Tonnage^0.25))
-abline(h=2,lty=2)
-abline(h=-2,lty=2)
-plot(tTonnage,absrtsr2,ylab="Square Root(|Standardized Residuals|)",xlab=expression(Tonnage^0.25))
-abline(lsfit(tTonnage,absrtsr2),lty=2,col=1)
-qqnorm(StanRes2, ylab = "Standardized Residuals")
-qqline(StanRes2, lty = 2, col=1)
-
-#Figure 3.45 on page 109
-par(mfrow=c(3,2))
-plot(density(tTime,bw="SJ",kern="gaussian"),type="l",
-main="Gaussian kernel density estimate",xlab="log(Time)")
-rug(tTime)
-boxplot(tTime,ylab="log(Time)")
-qqnorm(tTime, ylab = "log(Time)")
-qqline(tTime, lty = 2, col=1)
-sj <- bw.SJ(tTonnage,lower = 0.1, upper = 1000)
-plot(density(tTonnage,bw=sj,kern="gaussian"),type="l",
-main="Gaussian kernel density estimate",xlab=expression(Tonnage^0.25))
-rug(tTonnage)
-boxplot(tTonnage,ylab=expression(Tonnage^0.25))
-qqnorm(tTonnage, ylab=expression(Tonnage^0.25))
-qqline(tTonnage, lty = 2, col=1)
-
-detach(glakes)
-
-#Exercise 3.5.5
-cars04 <- read.csv("cars04.csv",header=TRUE)
-attach(cars04)
-
-#Output from R on pages 110 and 111
-m1 <- lm(SuggestedRetailPrice~DealerCost)
-summary(m1)
-
-#Figure 3.46 on page 110
-par(mfrow=c(2,2))
-plot(DealerCost,SuggestedRetailPrice)
-abline(lsfit(DealerCost,SuggestedRetailPrice),lty = 2, col=1)
-leverage1 <- hatvalues(m1)
-StanRes1 <- rstandard(m1)
-absrtsr1 <- sqrt(abs(StanRes1))
-residual1 <- m1$residuals
-plot(DealerCost,StanRes1, ylab="Standardized Residuals")
-abline(h=2,lty=2)
-abline(h=-2,lty=2)
-plot(DealerCost,absrtsr1,ylab="Square Root(|Standardized Residuals|)")
-abline(lsfit(DealerCost,absrtsr1),lty=2,col=1)
-qqnorm(StanRes1, ylab = "Standardized Residuals")
-qqline(StanRes1, lty = 2, col=1)
-
-#Output from R on page 111
-m2 <- lm(log(SuggestedRetailPrice)~log(DealerCost))
-summary(m2)
-
-#Figure 3.47 on page 111
-par(mfrow=c(2,2))
-plot(log(DealerCost),log(SuggestedRetailPrice))
-abline(lsfit(log(DealerCost),log(SuggestedRetailPrice)),lty = 1, col=1)
-leverage2 <- hatvalues(m2)
-StanRes2 <- rstandard(m2)
-absrtsr2 <- sqrt(abs(StanRes2))
-residual2 <- m2$residuals
-plot(log(DealerCost),StanRes2, ylab="Standardized Residuals")
-abline(h=2,lty=2)
-abline(h=-2,lty=2)
-plot(log(DealerCost),absrtsr2,ylab="Square Root(|Standardized Residuals|)")
-abline(lsfit(log(DealerCost),absrtsr2),lty=2,col=1)
-qqnorm(StanRes2, ylab = "Standardized Residuals")
-qqline(StanRes2, lty = 2, col=1)
-
-detach(cars04)
-
-#Exercise 3.5.6 based on a different set of generated data
-n<-500
-x <- runif(n,0,1)^3
-e <- rnorm(n,0,0.1)
-y <- exp(+2.5 + 1*x + e)
-
-#Figure 3.48 on page 112
-m1 <- lm(y~x)
-library(alr3)
-par(mfrow=c(1,1))
-inverse.response.plot(m1,key=TRUE)
-
-
