@@ -135,6 +135,7 @@ detach(bonds)
 #production data example
 production <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/production.txt",header=TRUE)
 attach(production)
+head(production)
 
 m1 <- lm(RunTime~RunSize)
 summary(m1)
@@ -163,6 +164,7 @@ predict(m1,newdata=data.frame(Crews=c(4,16)),interval="prediction",level=0.95)
 #Figure 3.16 on page 73
 StanRes1 <- rstandard(m1)
 plot(Crews,StanRes1,xlab="Number of Crews", ylab="Standardized Residuals")
+plot(m1$fitted.values,StanRes1,xlab="Fitted values", ylab="Standardized Residuals")
 
 #Figure 3.17 on page 74
 sabs <- sqrt(abs(StanRes1))
@@ -209,13 +211,13 @@ pred_m2 <- predict(m2,newdata=data.frame(sqrtcrews=c(2,4)),interval="prediction"
 pred_m2[,2] <- pred_m2[,2]^2
 pred_m2[,3] <- pred_m2[,3]^2
 predict(m1,newdata=data.frame(Crews=c(4,16)),interval="prediction",level=0.95)
-
+pred_m2
 detach(cleaning)
 
 
 
 
-
+#Supermarket sales data
 confood1 <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/confood1.txt",header=TRUE)
 attach(confood1)
 
@@ -240,7 +242,7 @@ detach(confood1)
 
 
 
-
+#Artificial data
 responsetransformation <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/responsetransformation.txt",header=TRUE)
 attach(responsetransformation)
 
@@ -274,7 +276,8 @@ qqline(x, lty = 2, col=2)
 
 #Figure 3.28 on page 87
 #alr3 is too old to be installed
-#remotes::install_github("cran/alr3")
+install.packages(remotes)
+remotes::install_github("cran/alr3")
 library(alr3)
 par(mfrow=c(1,1))
 inverseResponsePlot(m1,key=TRUE)
