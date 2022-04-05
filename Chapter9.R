@@ -1,9 +1,9 @@
 #March 17, 2009
 
 #Please change the file path in the command below to coincide with where you have stored the data files
-setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
+#setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
 
-confood2 <- read.table("confood2.txt", header=TRUE)
+confood2 <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/confood2.txt", header=TRUE)
 attach(confood2)
 
 #Figure 9.1 on page 306

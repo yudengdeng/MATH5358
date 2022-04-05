@@ -1,9 +1,9 @@
 #March 17, 2009
 
 #Please change the file path in the command below to coincide with where you have stored the data files
-setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
+#setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
 
-nyc <- read.csv("nyc.csv", header=TRUE)
+nyc <- read.csv("https://gattonweb.uky.edu/sheather/book/docs/datasets/nyc.csv", header=TRUE)
 attach(nyc)
 
 #Figure 6.1 on page 157
@@ -47,7 +47,7 @@ abline(lsfit(m1$fitted.values,y))
 detach(caution)
 
 
-nonlinearx <- read.table("nonlinearx.txt",header=TRUE)
+nonlinearx <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/nonlinearx.txt",header=TRUE)
 attach(nonlinearx)
 
 #Figure 6.7 on page 162
@@ -68,7 +68,7 @@ plot(m1$fitted.values,StanRes1,xlab="Fitted Values",ylab="Standardized Residuals
 detach(nonlinearx)
 
 
-nyc <- read.csv("nyc.csv", header=TRUE)
+nyc <- read.csv("https://gattonweb.uky.edu/sheather/book/docs/datasets/nyc.csv", header=TRUE)
 attach(nyc)
 
 #Figure 6.9 on page 165
@@ -99,7 +99,7 @@ avp(m1,variable=East,ask=FALSE,identify.points=FALSE)
 detach(nyc)
 
 
-defects <- read.table("defects.txt", header=TRUE)
+defects <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/defects.txt", header=TRUE)
 attach(defects)
 
 #Figure 6.11 on page 169
@@ -161,19 +161,20 @@ summary(mt)
 #Figure 6.20 on page 176
 library(car)
 par(mfrow=c(2,2))
-avp(mt,variable=Temperature,ask=FALSE,identify.points=FALSE)
-avp(mt,variable=Density,ask=FALSE,identify.points=FALSE)
-avp(mt,variable=Rate,ask=FALSE,identify.points=FALSE)
+avPlots(mt,variable=Temperature,ask=FALSE,identify.points=FALSE)
+avPlots(mt,variable=Density,ask=FALSE,identify.points=FALSE)
+avPlots(mt,variable=Rate,ask=FALSE,identify.points=FALSE)
 
 detach(defects)
 
 
-magazines <- read.csv("magazines.csv", header=TRUE)
+magazines <- read.csv("https://gattonweb.uky.edu/sheather/book/docs/datasets/magazines.csv", header=TRUE)
 attach(magazines)
 
 #R output on page 177
 library(alr3)
-summary(bctrans(AdRevenue~AdPages+SubRevenue+NewsRevenue))
+#summary(bctrans(AdRevenue~AdPages+SubRevenue+NewsRevenue))
+summary(tranxx <- powerTransform(cbind(AdPages,SubRevenue,NewsRevenue)~1, magazines))
 
 #Figure 6.21 on page 178
 pairs(AdRevenue~AdPages+SubRevenue+NewsRevenue)
@@ -189,7 +190,8 @@ inverse.response.plot(m1,key=TRUE)
 
 #R output on page 179
 library(alr3)
-summary(tranxy <- bctrans(~AdRevenue+AdPages+SubRevenue+NewsRevenue))
+#summary(tranxy <- bctrans(~AdRevenue+AdPages+SubRevenue+NewsRevenue))
+summary(tranxy <- powerTransform(cbind(AdRevenue,AdPages,SubRevenue,NewsRevenue)~1, magazines))
 
 #Figure 6.23 on page 180
 pairs(log(AdRevenue)~log(AdPages)+log(SubRevenue)+log(NewsRevenue))
@@ -226,7 +228,7 @@ summary(m2)
 detach(magazines)
 
 
-circulation <- read.table("circulation.txt", header=TRUE, sep="\t")
+circulation <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/circulation.txt", header=TRUE, sep="\t")
 attach(circulation)
 
 #Figure 6.28 on page 185
@@ -271,7 +273,7 @@ avp(m1,variable=Tabloid.with.a.Serious.Competitor,ask=FALSE,identify.points=FALS
 detach(circulation)
 
 
-profsalary <- read.table("profsalary.txt",header=TRUE)
+profsalary <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/profsalary.txt",header=TRUE)
 attach(profsalary)
 
 #Figure 6.33 on page 190
