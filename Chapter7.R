@@ -1,9 +1,9 @@
 #March 17, 2009
 
 #Please change the file path in the command below to coincide with where you have stored the data files
-setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
+#setwd("C:/Users/sheather.ADSTAT/Documents/docs/AModernApproachToRegression/Data")
 
-bridge <- read.table("bridge.txt", header=TRUE)
+bridge <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/bridge.txt", header=TRUE)
 attach(bridge)
 
 #Figure 7.1 on page 235
@@ -14,14 +14,25 @@ logDwgs <- log(Dwgs)
 logLength <- log(Length)
 logSpans <- log(Spans)
 X <- cbind(logDArea,logCCost,logDwgs,logLength,logSpans)
-install.packages("leaps")
+
+
+
+
+## All possible subset methods
+#install.packages("leaps") #regsubsets()
 library(leaps)
-b <- regsubsets(as.matrix(X),log(Time))
+b <- regsubsets(as.matrix(X),log(Time)) #Model selection by exhaustive search, forward or backward stepwise, or sequential replacement
 rs <- summary(b)
+rs
+ls(rs)
 par(mfrow=c(1,2))
 plot(1:5,rs$adjr2,xlab="Subset Size",ylab="Adjusted R-squared")
-library(car)
-subsets(b,statistic=c("adjr2"))
+library(car) #subsets()
+subsets(b,statistic=c("adjr2"),legend = T) #Plot Output from regsubsets Function in leaps package
+
+
+
+
 
 #Table 7.1 on page 235
 #Calculate adjusted R-squared
@@ -73,10 +84,14 @@ extractAIC(om5,k=2)+2*npar*(npar+1)/(n-npar-1)
 #Calculate BIC
 extractAIC(om5,k=log(n))
 
+
+
 #Regression output on pages 235 and 236
 summary(om2)
 summary(om3)
 
+
+## backward elimination
 #Output from R on page 237
 backAIC <- step(m1,direction="backward", data=bridge)
 backBIC <- step(m1,direction="backward", data=bridge, k=log(n))
@@ -93,8 +108,13 @@ direction="forward", data=bridge,k=log(n))
 detach(bridge)
 
 
-prostateTraining <- read.table("prostateTraining.txt", header=TRUE)
+
+
+prostateTraining <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/prostateTraining.txt", header=TRUE)
 attach(prostateTraining)
+head(prostateTraining)
+dim(prostateTraining)
+#lpsa: log-cancer volume
 
 #Figure 7.2 on page 240
 pairs(lpsa~lcavol+lweight+age+lbph+svi+lcp+gleason+pgg45)
@@ -138,21 +158,23 @@ mmp(m1,gleason,key=NULL)
 mmp(m1,pgg45,key=NULL)
 mmp(m1,m1$fitted.values,xlab="Fitted Values",key=NULL)
 
+#check for multicollinear
 #R output on page 244
 library(car)
-vif(m1)
+vif(m1) #whether anyone exceeds 5
 
 #Figure 7.7 on page 244
 library(car)
 par(mfrow=c(2,4))
-avp(m1,variable=lcavol,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=lweight,ask=FALSE,identify.points=TRUE, main="")
-avp(m1,variable=age,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=lbph,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=svi,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=lcp,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=gleason,ask=FALSE,identify.points=FALSE, main="")
-avp(m1,variable=pgg45,ask=FALSE,identify.points=FALSE, main="")
+avPlots(m1)
+# avPlots(m1,variable=lcavol,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=lweight,ask=FALSE,identify.points=TRUE, main="")
+# avPlots(m1,variable=age,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=lbph,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=svi,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=lcp,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=gleason,ask=FALSE,identify.points=FALSE, main="")
+# avPlots(m1,variable=pgg45,ask=FALSE,identify.points=FALSE, main="")
 
 #Figure 7.8 on page 245
 X <- cbind(lcavol,lweight,age,lbph,svi,lcp,gleason,pgg45)
@@ -249,7 +271,7 @@ summary(om7)
 detach(prostateTraining)
 
 
-prostateTest <- read.table("prostateTest.txt", header=TRUE)
+prostateTest <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/prostateTest.txt", header=TRUE)
 attach(prostateTest)
 
 #Regression output on page 247
@@ -263,7 +285,7 @@ summary(om7)
 detach(prostateTest)
 
 
-prostateTraining <- read.table("prostateTraining.txt", header=TRUE)
+prostateTraining <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/prostateTraining.txt", header=TRUE)
 attach(prostateTraining)
 
 #Figure 7.9 on page 249
@@ -273,7 +295,7 @@ b <- regsubsets(as.matrix(X),lpsa)
 rs <- summary(b)
 par(mfrow=c(1,2))
 library(car)
-subsets(b,statistic=c("adjr2"),main="With Case 45",min.size=1,max.size=5,cex.subsets=0.7)
+subsets(b,statistic=c("adjr2"),main="With Case 45",min.size=1,max.size=5,cex.subsets=0.7,legend=T)
 
 m2 <- update(m1, subset=(1:67)[-c(45)])
 lcavol1 <- lcavol[-c(45)]
@@ -294,7 +316,9 @@ subsets(b,statistic=c("adjr2"),main="Without Case 45",min.size=1,max.size=5,cex.
 detach(prostateTraining) 
 
 
-prostateAlldata <- read.table("prostateAlldata.txt", header=TRUE)
+prostateAlldata <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/prostateAlldata.txt", header=TRUE)
+dim(prostateAlldata)
+head(prostateAlldata)
 attach(prostateAlldata)
 
 #Figure 7.10 on page 249
@@ -308,16 +332,36 @@ legend(4.5,2,legend=c("Training","Test"),pch=3:2,col=2:1,title="Data Set")
 detach(prostateAlldata)
 
 
-prostateTest <- read.table("prostateTest.txt", header=TRUE)
+prostateTest <- read.table("https://gattonweb.uky.edu/sheather/book/docs/datasets/prostateTest.txt", header=TRUE)
 attach(prostateTest)
 
 #Figure 7.11 on page 250
 m1 <- lm(lpsa~lcavol+lweight+age+lbph+svi+lcp+gleason+pgg45)
 library(car)
 par(mfrow=c(1,1))
-avp(m1,variable=lweight,ask=FALSE,identify.points=TRUE, main="")
+avPlots(m1,variable=lweight,ask=FALSE,identify.points=TRUE, main="")
 
 detach(prostateTest)
+
+
+## LASSO method
+library(glmnet)
+#perform k-fold cross-validation to find optimal lambda value
+cv_model <- cv.glmnet(data.matrix(prostateTraining[,2:9]), prostateTraining$lpsa, alpha = 1)
+
+#find optimal lambda value that minimizes test MSE
+best_lambda <- cv_model$lambda.min
+best_lambda
+
+plot(cv_model)
+
+best_model <- glmnet(data.matrix(prostateAlldata[-c(9,45),2:9]), prostateAlldata$lpsa[-c(9,45)], alpha = 1, lambda = best_lambda)
+coef(best_model)
+
+
+
+
+
 
 #################EXERCISES
 
